@@ -13,8 +13,8 @@ const formAdd = document.querySelector("#new-card-form");
 
 const cardsContainer = document.querySelector(".cards__list");
 
-const nameInput = document.querySelector(".popup__input_type_name");
-const jobInput = document.querySelector(".popup__input_type_description");
+const nameInput = document.querySelector("#name-input");
+const jobInput = document.querySelector("#job-input");
 
 const profileName = document.querySelector(".profile__title");
 const profileJob = document.querySelector(".profile__description");
