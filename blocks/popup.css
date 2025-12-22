@@ -162,7 +162,7 @@
   border-bottom: 3px solid red;
 }
 
-.form__input-error {
+.popup__input-error {
   display: none;
   color: red;
   font-size: 12px;
