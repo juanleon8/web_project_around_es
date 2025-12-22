@@ -157,3 +157,23 @@
     padding: 0;
   }
 }
+
+.form__input_type_error {
+  border-bottom: 3px solid red;
+}
+
+.form__input-error {
+  display: none;
+  color: red;
+  font-size: 12px;
+}
+
+.form__input-error_active {
+  display: block;
+}
+
+.popup__button:disabled {
+  background-color: #e5e5e5;
+  color: #b0b0b0;
+  cursor: not-allowed;
+}

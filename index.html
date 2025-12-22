@@ -10,6 +10,7 @@
     <!-- Scripts (al final mejor, pero si lo pones aquí no pasa nada) -->
     <script src="./scripts/index.js" defer></script>
     <script src="./scripts/perfio.js" defer></script>
+    <script src="./scripts/Validacion.js" defer></script>
   </head>
 
   <body class="page">
@@ -82,26 +83,47 @@
             class="popup__close"
             type="button"
           ></button>
+
           <h3 class="popup__title">Editar perfil</h3>
 
-          <form class="popup__form" id="edit-profile-form">
+          <form
+            class="popup__form"
+            id="edit-profile-form"
+            name="edit-profile"
+            novalidate
+          >
             <input
               class="popup__input"
               id="name-input"
               name="name"
               placeholder="Nombre"
               type="text"
+              minlength="2"
+              maxlength="40"
               required
             />
+
+            <span
+              class="name-input-error form__input-error"
+              id="name-input-error"
+            >
+            </span>
+
             <input
               class="popup__input"
               id="job-input"
               name="description"
               placeholder="Acerca de mí"
               type="text"
+              minlength="2"
+              maxlength="200"
               required
             />
-            <button class="button popup__button" type="submit">Guardar</button>
+            <span id="job-input-error" class="form__input-error"></span>
+
+            <button class="button popup__button" type="submit" disabled>
+              Guardar
+            </button>
           </form>
         </div>
       </div>
@@ -116,21 +138,31 @@
           ></button>
           <h3 class="popup__title">Nuevo lugar</h3>
 
-          <form class="popup__form" id="new-card-form">
+          <form class="popup__form" id="new-card-form" name="nuevo-lugar">
             <input
               class="popup__input"
               name="place-name"
+              id="p-name"
               placeholder="Título"
               required
               type="text"
+              minlength="2"
+              maxlength="30"
             />
+
+            <span id="p-name-error" class="form__input-error"></span>
+
             <input
               class="popup__input"
               name="link"
+              id="link-input"
               placeholder="Enlace a la imagen"
               required
               type="url"
             />
+
+            <span id="link-input-error" class="form__input-error"></span>
+
             <button class="button popup__button" type="submit">Crear</button>
           </form>
         </div>
