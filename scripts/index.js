@@ -29,31 +29,6 @@ initialCards.forEach((card) => {
   console.log(card.name);
 });
 
-//cerrar popup
-const popup = document.querySelector(".popup");
-
-// Cerrar al hacer clic en la superposición
-popup.addEventListener("mousedown", (event) => {
-  if (event.target === popup) {
-    closePopup(popup);
-  }
-});
-
-function handleEscClose(event) {
-  if (event.key === "Escape") {
-    const openedPopup = document.querySelector(".popup_is-opened");
-    if (openedPopup) {
-      closePopup(openedPopup);
-    }
-  }
-}
-
-document.addEventListener("keydown", handleEscClose);
-
-function closePopup(popup) {
-  popup.classList.remove("popup_is-opened");
-}
-
 // -----------------------------
 // Selección de elementos globales
 // -----------------------------
@@ -208,3 +183,56 @@ document
 
 // Formulario agregar tarjeta
 formAdd.addEventListener("submit", handleCardFormSubmit);
+
+//----
+//CARD
+//----
+
+import Card from "./card.js";
+
+const formElement = document.querySelector("#new-card-form");
+
+formElement.addEventListener("submit", (evt) => {
+  evt.preventDefault();
+
+  // 1. Extraer datos del formulario
+  const cardData = {
+    name: evt.target.elements["place-name"].value,
+    link: evt.target.elements["link"].value,
+  };
+
+  // 2. Crear instancia de Card
+  const card = new Card(cardData, "#card-template");
+
+  // 3. Generar elemento y renderizar
+  const cardElement = card.generateCard();
+  cardsContainer.prepend(cardElement);
+
+  formElement.reset(); // Limpiar formulario
+});
+
+//-------------
+//FormValidator
+//-------------
+
+import FormValidator from "./FormValidator.js";
+
+// Objeto de configuración
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button",
+  inputErrorClass: "form__input_type_error",
+  errorClass: "popup__input-error",
+};
+
+// 1. Instancia para el formulario de "Nueva Tarjeta"
+const newCardForm = document.querySelector("#new-card-form");
+const newCardValidator = new FormValidator(validationConfig, newCardForm);
+newCardValidator.enableValidation();
+
+// 2. Instancia para el formulario de "Perfil" (si tuvieras otro)
+const profileForm = document.querySelector("#profile-form");
+const profileValidator = new FormValidator(validationConfig, profileForm);
+profileValidator.enableValidation();
