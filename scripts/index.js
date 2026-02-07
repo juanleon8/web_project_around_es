@@ -303,8 +303,6 @@ class Popup {
   }
 }
 
-import Popup from "./Popup.js";
-
 class PopupWithImage extends Popup {
   constructor(popupSelector) {
     super(popupSelector);
@@ -321,8 +319,6 @@ class PopupWithImage extends Popup {
     super.open();
   }
 }
-
-import Popup from "./Popup.js";
 
 class PopupWithForm extends Popup {
   constructor(popupSelector, handleFormSubmit) {
