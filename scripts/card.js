@@ -1,6 +1,6 @@
 //CARD
 
-class Card {
+export class Card {
   // El constructor recibe los datos y el selector del template
   constructor(data, cardSelector) {
     this._name = data.name;

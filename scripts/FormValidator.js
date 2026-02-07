@@ -1,20 +1,20 @@
-class FormValidator {
+export class FormValidator {
   constructor(config, formElement) {
     this._config = config;
     this._formElement = formElement;
     // Seleccionamos todos los inputs y el botón una sola vez para optimizar
     this._inputList = Array.from(
-      this._formElement.querySelectorAll(this._config.inputSelector)
+      this._formElement.querySelectorAll(this._config.inputSelector),
     );
     this._buttonElement = this._formElement.querySelector(
-      this._config.submitButtonSelector
+      this._config.submitButtonSelector,
     );
   }
 
   // MÉTODO PRIVADO: Muestra el mensaje de error
   _showInputError(inputElement, errorMessage) {
     const errorElement = this._formElement.querySelector(
-      `#${inputElement.id}-error`
+      `#${inputElement.id}-error`,
     );
     inputElement.classList.add(this._config.inputErrorClass);
     errorElement.textContent = errorMessage;
@@ -24,7 +24,7 @@ class FormValidator {
   // MÉTODO PRIVADO: Oculta el mensaje de error
   _hideInputError(inputElement) {
     const errorElement = this._formElement.querySelector(
-      `#${inputElement.id}-error`
+      `#${inputElement.id}-error`,
     );
     inputElement.classList.remove(this._config.inputErrorClass);
     errorElement.classList.remove(this._config.errorClass);
