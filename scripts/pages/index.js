@@ -1,3 +1,4 @@
+console.log("Inicio");
 // -----------------------------
 // Imports
 // -----------------------------
@@ -8,7 +9,7 @@ import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 import FormValidator from "./FormValidator.js";
 import {
-  initialCards,
+  //initialCards,
   btnEditar,
   modalEdit,
   modalAdd,
@@ -33,6 +34,7 @@ import {
 const userInfo = new UserInfo({
   nameSelector: ".profile__title",
   jobSelector: ".profile__description",
+  avatarSelector: ".profile__image",
 });
 
 // -----------------------------
@@ -44,10 +46,25 @@ imagePopup.setEventListeners();
 // -----------------------------
 // Crear tarjeta
 // -----------------------------
-function createCard(data) {
-  const card = new Card(data, "#card-template", (cardData) => {
-    imagePopup.open(cardData);
-  });
+function createCard(data, userId) {
+  const card = new Card(
+    data,
+    "#card-template",
+    (cardData) => imagePopup.open(cardData),
+    api,
+    userId,
+    (cardId, cardElement) => {
+      confirmPopup.open(() => {
+        api
+          .deleteCard(cardId)
+          .then(() => {
+            cardElement.remove();
+            confirmPopup.close();
+          })
+          .catch(console.error);
+      });
+    },
+  );
 
   return card.generateCard();
 }
@@ -57,7 +74,7 @@ function createCard(data) {
 // -----------------------------
 const cardSection = new Section(
   {
-    items: initialCards,
+    items: [],
     renderer: (item) => {
       const cardElement = createCard(item);
       cardSection.addItem(cardElement);
@@ -66,17 +83,26 @@ const cardSection = new Section(
   ".cards__list",
 );
 
-cardSection.renderItems();
-
 // -----------------------------
 // Popup editar perfil
 // -----------------------------
 const editProfilePopup = new PopupWithForm("#edit-popup", (formData) => {
-  userInfo.setUserInfo({
-    name: formData.name,
-    job: formData.job,
-  });
-  editProfilePopup.close();
+  editProfilePopup.setLoading(true, "Guardando...");
+
+  api
+    .updateUserInfo(formData.name, formData.about)
+    .then((userData) => {
+      userInfo.setUserInfo({
+        name: userData.name,
+        job: userData.about,
+      });
+
+      editProfilePopup.close();
+    })
+    .catch(console.error)
+    .finally(() => {
+      editProfilePopup.setLoading(false, "Guardar");
+    });
 });
 
 editProfilePopup.setEventListeners();
@@ -90,16 +116,46 @@ document
     editProfilePopup.open();
   });
 
+const avatarPopup = new PopupWithForm("#avatar-popup", (formData) => {
+  avatarPopup.setLoading(true, "Guardando...");
+
+  api
+    .updateAvatar(formData.avatar)
+    .then((userData) => {
+      userInfo.setAvatar(userData.avatar);
+      avatarPopup.close();
+    })
+    .catch(console.error)
+    .finally(() => {
+      avatarPopup.setLoading(false, "Guardar");
+    });
+});
+
+avatarPopup.setEventListeners();
+
+document
+  .querySelector(".profile__avatar-container")
+  .addEventListener("click", () => {
+    avatarPopup.open();
+  });
+
 // -----------------------------
 // Popup agregar tarjeta
 // -----------------------------
-const addCardPopup = new PopupWithForm("#edit-popup", (formData) => {
-  const cardElement = createCard({
-    name: formData["place-name"],
-    link: formData.link,
-  });
-  cardSection.addItem(cardElement);
-  addCardPopup.close();
+const addCardPopup = new PopupWithForm("#new-card-popup", (formData) => {
+  addCardPopup.setLoading(true, "Creando...");
+
+  api
+    .addCard(formData["place-name"], formData.link)
+    .then((cardData) => {
+      const cardElement = createCard(cardData);
+      cardSection.addItem(cardElement);
+      addCardPopup.close();
+    })
+    .catch(console.error)
+    .finally(() => {
+      addCardPopup.setLoading(false, "Crear");
+    });
 });
 
 addCardPopup.setEventListeners();
@@ -108,7 +164,7 @@ document.querySelector(".profile__add-button").addEventListener("click", () => {
   addCardPopup.open();
 });
 
-// ----------------------------- ORIGINAL
+//----------------------------- ORIGINAL
 // Funciones abrir / cerrar modal
 // -----------------------------
 function openModal(modal) {
@@ -157,7 +213,7 @@ formEdit.addEventListener("submit", function (evt) {
 // -----------------------------
 // Crear tarjeta desde template
 // -----------------------------
-function getCardElement(
+/*function getCardElement(
   name = "Sin título",
   link = "./images/placeholder.jpg",
 ) {
@@ -193,27 +249,27 @@ function getCardElement(
   });
 
   return cardElement;
-}
+}*/
 
 // -----------------------------
 // Renderizar tarjeta en el contenedor
 // -----------------------------
-function renderCard(name, link, container) {
+/*function renderCard(name, link, container) {
   const newCard = getCardElement(name, link);
   container.prepend(newCard);
-}
+}*/
 
 // -----------------------------
 // Tarjetas iniciales
 // -----------------------------
-initialCards.forEach(function (item) {
-  renderCard(item.name, item.link, cardsContainer);
-});
+// initialCards.forEach(function (item) {
+//   renderCard(item.name, item.link, cardsContainer);
+// });
 
 // -----------------------------
 // Nueva tarjeta
 // -----------------------------
-function handleCardFormSubmit(evt) {
+/**function handleCardFormSubmit(evt) {
   evt.preventDefault();
 
   const inputName = formAdd.querySelector("#p-name");
@@ -223,23 +279,23 @@ function handleCardFormSubmit(evt) {
 
   formAdd.reset();
   closeModal(modalAdd);
-}
+} */
 
 // Abrir modal para agregar tarjeta
-document
+/*document
   .querySelector(".profile__add-button")
   .addEventListener("click", function () {
     openModal(modalAdd);
-  });
+  });*/
 
 // Formulario agregar tarjeta
-formAdd.addEventListener("submit", handleCardFormSubmit);
+/**formAdd.addEventListener("submit", handleCardFormSubmit); */
 
 //----
 //CARD
 //----
 
-const formElement = document.querySelector("#new-card-form");
+/* const formElement = document.querySelector("#new-card-form");
 
 formElement.addEventListener("submit", (evt) => {
   evt.preventDefault();
@@ -258,7 +314,7 @@ formElement.addEventListener("submit", (evt) => {
   cardsContainer.prepend(cardElement);
 
   formElement.reset(); // Limpiar formulario
-});
+}); */
 
 //-------------
 //FormValidator
@@ -298,3 +354,46 @@ const addCardFormValidator = new FormValidator(
   document.querySelector("#new-card-form"),
 );
 addCardFormValidator.enableValidation();
+
+// -----------------------------
+// Api
+// -----------------------------
+import Api from "../components/Api.js";
+
+const api = new Api({
+  baseUrl: "https://around-api.es.tripleten-services.com/v1",
+  headers: {
+    authorization: "35aeb745-25a8-46c4-b88a-8f17b5db9d5c",
+    "Content-Type": "application/json",
+  },
+});
+
+//Cargar tarjetas con promise
+Promise.all([api.getUserInfo(), api.getInitialCards()])
+  .then(([userData, cards]) => {
+    const userId = userData._id;
+    //Mostrar los datos del usuario
+    userInfo.setUserInfo({
+      name: userData.name,
+      job: userData.about,
+    });
+
+    userInfo.setAvatar(userData.avatar);
+    // Render
+    cards.forEach((cardData) => {
+      const cardElement = createCard(cardData, userId);
+
+      cardSection.addItem(cardElement);
+    });
+  })
+
+  .catch(console.error);
+
+// -----------------------------
+// Confirmacion
+// -----------------------------
+import PopupWithConfirm from "../components/PopupConfirm.js";
+
+const confirmPopup = new PopupWithConfirm("#confirm-popup");
+
+confirmPopup.setEventListeners();

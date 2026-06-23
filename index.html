@@ -26,7 +26,15 @@
       <main class="content">
         <!-- PERFIL -->
         <section class="profile page__section">
-          <img class="profile__image" src="./images/avatar.jpg" alt="Avatar" />
+          <div class="profile__avatar-container">
+            <img
+              class="profile__image"
+              src="./images/avatar.jpg"
+              alt="avatar"
+            />
+
+            <div class="profile__avatar-overlay"></div>
+          </div>
 
           <div class="profile__info">
             <h1 class="profile__title">Jacques Cousteau</h1>
@@ -108,7 +116,7 @@
             <input
               class="popup__input"
               id="job-input"
-              name="description"
+              name="about"
               placeholder="Acerca de mí"
               type="text"
               minlength="2"
@@ -175,6 +183,40 @@
           <img alt="" class="popup__image" src="#" />
           <p class="popup__caption"></p>
         </div>
+      </div>
+    </div>
+    <!-- Popup confirmar GUARDADO -->
+    <div class="popup" id="avatar-popup">
+      <div class="popup__content">
+        <button class="popup__close" type="button" aria-label="Cerrar"></button>
+
+        <h3 class="popup__title">Cambiar foto de perfil</h3>
+
+        <form class="popup__form" id="avatar-form" name="avatar-form">
+          <input
+            class="popup__input"
+            type="url"
+            name="avatar"
+            placeholder="URL de la imagen"
+            required
+          />
+
+          <button class="button popup__button" type="submit">Guardar</button>
+        </form>
+      </div>
+    </div>
+    <!-- Popup confirmar eliminación -->
+    <div class="popup" id="confirm-popup">
+      <div class="popup__content--confirmar">
+        <button aria-label="Cerrar" class="popup__close" type="button"></button>
+
+        <h3 class="popup__title">¿Estás seguro?</h3>
+
+        <form class="popup__form" id="confirm-form">
+          <button class="button popup__button" type="submit">
+            Sí, eliminar
+          </button>
+        </form>
       </div>
     </div>
   </body>

@@ -43,7 +43,36 @@
   border-radius: 50%;
   object-fit: cover;
   background-position: center;
+}
+
+.profile__avatar-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
   margin-right: 29px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.profile__avatar-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5) url("../images/edit-icon.svg") center no-repeat;
+  background-size: 30px 30px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  cursor: pointer;
+}
+
+.profile__avatar-container:hover .profile__avatar-overlay {
+  opacity: 1;
+}
+
+.profile__avatar-overlay img {
+  width: 26px;
+  height: 26px;
+  background: transparent url("../images/edit-icon.svg") center no-repeat;
+  background-size: 30px 30px;
 }
 
 .profile__add-button {
