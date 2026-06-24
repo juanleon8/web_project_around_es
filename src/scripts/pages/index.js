@@ -7,6 +7,9 @@ import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 import FormValidator from "./FormValidator.js";
+import PopupWithConfirm from "../components/PopupConfirm.js";
+import Api from "../components/Api.js";
+
 import {
   //initialCards,
   btnEditar,
@@ -26,6 +29,46 @@ import {
   modalImageCaption,
   modalImageCloseButton,
 } from "../utils/constants.js";
+
+// -----------------------------
+// Api
+// -----------------------------
+
+const api = new Api({
+  baseUrl: "https://around-api.es.tripleten-services.com/v1",
+  headers: {
+    authorization: "35aeb745-25a8-46c4-b88a-8f17b5db9d5c",
+    "Content-Type": "application/json",
+  },
+});
+
+//Cargar tarjetas con promise
+Promise.all([api.getUserInfo(), api.getInitialCards()])
+  .then(([userData, cards]) => {
+    const userId = userData._id;
+    //Mostrar los datos del usuario
+    userInfo.setUserInfo({
+      name: userData.name,
+      job: userData.about,
+    });
+
+    userInfo.setAvatar(userData.avatar);
+    // Render
+    cards.forEach((cardData) => {
+      const cardElement = createCard(cardData, userId);
+
+      cardSection.addItem(cardElement);
+    });
+  })
+
+  .catch(console.error);
+
+// -----------------------------
+// Confirmacion
+// -----------------------------
+const confirmPopup = new PopupWithConfirm("#confirm-popup");
+
+confirmPopup.setEventListeners();
 
 // -----------------------------
 // UserInfo
@@ -353,46 +396,3 @@ const addCardFormValidator = new FormValidator(
   document.querySelector("#new-card-form"),
 );
 addCardFormValidator.enableValidation();
-
-// -----------------------------
-// Api
-// -----------------------------
-import Api from "../components/Api.js";
-
-const api = new Api({
-  baseUrl: "https://around-api.es.tripleten-services.com/v1",
-  headers: {
-    authorization: "35aeb745-25a8-46c4-b88a-8f17b5db9d5c",
-    "Content-Type": "application/json",
-  },
-});
-
-//Cargar tarjetas con promise
-Promise.all([api.getUserInfo(), api.getInitialCards()])
-  .then(([userData, cards]) => {
-    const userId = userData._id;
-    //Mostrar los datos del usuario
-    userInfo.setUserInfo({
-      name: userData.name,
-      job: userData.about,
-    });
-
-    userInfo.setAvatar(userData.avatar);
-    // Render
-    cards.forEach((cardData) => {
-      const cardElement = createCard(cardData, userId);
-
-      cardSection.addItem(cardElement);
-    });
-  })
-
-  .catch(console.error);
-
-// -----------------------------
-// Confirmacion
-// -----------------------------
-import PopupWithConfirm from "../components/PopupConfirm.js";
-
-const confirmPopup = new PopupWithConfirm("#confirm-popup");
-
-confirmPopup.setEventListeners();
