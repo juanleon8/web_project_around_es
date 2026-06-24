@@ -25,9 +25,7 @@ export const initialCards = [
   },
 ];
 
-initialCards.forEach((card) => {
-  console.log(card.name);
-});
+initialCards.forEach((card) => {});
 
 // -----------------------------
 // Selección de elementos globales

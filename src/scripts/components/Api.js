@@ -62,11 +62,9 @@ export default class Api {
       headers: this._headers,
     })
       .then((res) => {
-        console.log("LIKE RESPONSE:", res.status);
         return this._checkResponse(res);
       })
       .catch((err) => {
-        console.log("LIKE ERROR:", err);
         throw err;
       });
   }
@@ -77,11 +75,9 @@ export default class Api {
       headers: this._headers,
     })
       .then((res) => {
-        console.log("UNLIKE RESPONSE:", res.status);
         return this._checkResponse(res);
       })
       .catch((err) => {
-        console.log("UNLIKE ERROR:", err);
         throw err;
       });
   }
@@ -93,11 +89,3 @@ export default class Api {
     }).then((res) => this._checkResponse(res));
   }
 }
-
-const api = new Api({
-  baseUrl: "https://around-api.es.tripleten-services.com/v1",
-  headers: {
-    authorization: "35aeb745-25a8-46c4-b88a-8f17b5db9d5c",
-    "Content-Type": "application/json",
-  },
-});

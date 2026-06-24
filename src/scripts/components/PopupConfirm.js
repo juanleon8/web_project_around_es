@@ -1,6 +1,8 @@
-export default class PopupWithConfirm {
-  constructor(selector) {
-    this._popup = document.querySelector(selector);
+import Popup from "./Popup.js";
+
+export default class PopupWithConfirm extends Popup {
+  constructor(popupSelector) {
+    super(popupSelector);
     this._form = this._popup.querySelector("form");
   }
 
